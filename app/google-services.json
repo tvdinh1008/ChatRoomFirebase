@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "572710414632",
+    "firebase_url": "https://chatroomfirebase-ad3f6.firebaseio.com",
+    "project_id": "chatroomfirebase",
+    "storage_bucket": "chatroomfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:572710414632:android:958e6d777a99e97008881d",
+        "android_client_info": {
+          "package_name": "com.tvdinh.chatroomfirebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "572710414632-pfushm459ip4unq5tkqm6a9avv0cbru1.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDPdxia3PkGySV-b01pj4cuiLZOQjQ1wjA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "572710414632-pfushm459ip4unq5tkqm6a9avv0cbru1.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
