@@ -78,9 +78,11 @@ public class Main2Activity extends AppCompatActivity {
                     bắt buộc trong TH: bạn logout tài khoản A. sau đó bạn đăng nhập lại bằng tài khoản A
                     ko hiểu sao lại exception : You cannot start a load for a destroyed activity
                     trong khi mình đã sử dụng :setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP) khi đóng intent
+                    //Glide.with(Main2Activity.this).load(user.getImageURL()).into(profile_image);
                      */
                     try {
-                        Glide.with(Main2Activity.this).load(user.getImageURL()).into(profile_image);
+
+                        Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
                     }
                     catch (Exception e)
                     {

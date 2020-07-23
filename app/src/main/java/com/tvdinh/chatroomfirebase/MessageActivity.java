@@ -48,6 +48,15 @@ public class MessageActivity extends AppCompatActivity {
     RecyclerView recyclerView;
 
     Intent intent;
+    /*
+        xem trạng thái tin nhắn đã xem chưa bằng cách gắn sự kiện lắng nghe trạng thái
+        khi gửi tin A cho B ->trạng thái tin là chưa xem
+
+        bắt sự kiện trên thằng B(Khi B click vào chat, hoặc B gửi tin cho A), Để đọc dữ liệu
+        reference= FirebaseDatabase.getInstance().getReference("Users").child(userid);
+
+     */
+    ValueEventListener seenListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,8 +83,6 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 
 
-
-
         profile_image=findViewById(R.id.profile_image);
         username=findViewById(R.id.username);
         btn_send=findViewById(R.id.btn_send);
@@ -99,8 +106,6 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-
-
         firebaseUser= FirebaseAuth.getInstance().getCurrentUser();
         reference= FirebaseDatabase.getInstance().getReference("Users").child(userid);
 
@@ -116,14 +121,42 @@ public class MessageActivity extends AppCompatActivity {
                     profile_image.setImageResource(R.mipmap.ic_launcher);
                 }else
                 {
-                    Glide.with(MessageActivity.this).load(user.getImageURL()).into(profile_image);
+                    //Glide.with(MessageActivity.this).load(user.getImageURL()).into(profile_image);
+                    Glide.with(getApplicationContext()).load(user.getImageURL()).into(profile_image);
                 }
+
+                //
                 readMessage(firebaseUser.getUid(),userid,user.getImageURL());
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
+            }
+        });
+        seenMessage(userid);
+    }
+
+    private void seenMessage(final String userid)
+    {
+        // sự kiện đang xẩy ra trên userid : nếu là sự kiện xem tin trên thằng A thì tức là đã xem
+        reference=FirebaseDatabase.getInstance().getReference("Chats");
+        seenListener=reference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for(DataSnapshot snapshot: dataSnapshot.getChildren())
+                {
+                    Chat chat=snapshot.getValue(Chat.class);
+                    if(chat.getReceiver().equals(firebaseUser.getUid())&& chat.getSender().equals(userid))
+                    {
+                        HashMap<String, Object> hashMap=new HashMap<>();
+                        hashMap.put("isseen",true);
+                        snapshot.getRef().updateChildren(hashMap);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
     }
@@ -136,7 +169,7 @@ public class MessageActivity extends AppCompatActivity {
         hashMap.put("sender",sender);// id người gửi
         hashMap.put("receiver",receiver);//id người nhận
         hashMap.put("message",message);// nội dụng tin nhắn
-
+        hashMap.put("isseen",false);//trạng thái tin nhắn
         reference1.child("Chats").push().setValue(hashMap);//
     }
 
@@ -170,7 +203,6 @@ public class MessageActivity extends AppCompatActivity {
         });
     }
 
-
     //
 
     private void status(String status){
@@ -178,7 +210,6 @@ public class MessageActivity extends AppCompatActivity {
 
         HashMap<String,Object> hashMap=new HashMap<>();
         hashMap.put("status",status);
-
         reference.updateChildren(hashMap);
     }
 
@@ -190,8 +221,10 @@ public class MessageActivity extends AppCompatActivity {
 
     @Override
     protected void onPause() {
+        if (seenListener != null && reference!=null) {
+            reference.removeEventListener(seenListener);
+        }
         super.onPause();
         status("offline");
     }
-
 }
