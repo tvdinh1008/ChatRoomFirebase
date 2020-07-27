@@ -1,4 +1,12 @@
 # ChatRoomFirebase
+
+//vào android studio: close project đi sau đó có màn hình Welcome to android studio->check out project from version control->git
+
+//->điền url:https://github.com/tvdinh1008/ChatRoomFirebase và đường dẫn lưu ví dụ :F:\Nam_3\ChatRoomFirebase->clone(OKi)
+
+//push lên git: VCS->commit,  VCS->git->push
+
+
 Sử dụng livedata + MVVM
 Cơ sở dữ liệu trên firebase realtime database (dữ liệu lưu kiểu json)
 sử dụng storage trên firabase để lưu ảnh đại diện cho user
